@@ -10,13 +10,14 @@ def get_main_kb() -> ReplyKeyboardMarkup:
     kb = ReplyKeyboardMarkup(
         keyboard=[
             [
+                KeyboardButton(text=_("Get product information")),
+            ],
+            [
                 KeyboardButton(text=_("Get information from the database")),
                 KeyboardButton(text=_("Stop notifications"))
             ],
-            [
-                KeyboardButton(text=_("Get product information")),
-            ]
-        ]
+        ],
+        resize_keyboard=True
     )
 
     return kb

@@ -2,7 +2,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from bot.middlewares.i18n import gettext as _
 
 
-def subscribe_to_the_article() -> InlineKeyboardMarkup:
+def get_subscribe_to_the_article_ikb() -> InlineKeyboardMarkup:
     """
     Subscribe to the article
     :return: InlineKeyboardMarkup

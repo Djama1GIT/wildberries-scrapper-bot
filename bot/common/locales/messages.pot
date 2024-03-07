@@ -33,7 +33,35 @@ msgstr ""
 msgid "Subscribe"
 msgstr ""
 
+msgid "Which article's information do you want to receive?"
+msgstr ""
+
+msgid "The article number must be in numerical format."
+msgstr ""
+
+msgid "It is impossible to get information about this article."
+msgstr ""
+
+msgid "There was an error getting the data, try again later."
+msgstr ""
+
+msgid "Product name"
+msgstr ""
+
+msgid "Article"
+msgstr ""
+
+msgid "Price"
+msgstr ""
+
+msgid "Rating"
+msgstr ""
+
+msgid "Quantity in stock"
+msgstr ""
+
 #: bot/routers/client/start.py:15
 msgid "Hi, {}"
 msgstr ""
+
 
