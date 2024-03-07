@@ -29,6 +29,10 @@ msgstr ""
 msgid "Get product information"
 msgstr ""
 
+#: bot/keyboards/articles.py:13
+msgid "Subscribe"
+msgstr ""
+
 #: bot/routers/client/start.py:15
 msgid "Hi, {}"
 msgstr ""

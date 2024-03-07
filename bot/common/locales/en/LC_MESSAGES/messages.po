@@ -20,18 +20,21 @@ msgstr ""
 
 #: bot/keyboards/main.py:13
 msgid "Get information from the database"
-msgstr "Get information from the database"
+msgstr "📤 Get information from the database"
 
 #: bot/keyboards/main.py:14
 msgid "Stop notifications"
-msgstr ""
+msgstr "⛔ Stop notifications"
 
 #: bot/keyboards/main.py:17
 msgid "Get product information"
-msgstr ""
+msgstr "🎯 Get product information"
 
+#: bot/keyboards/articles.py:13
+msgid "Subscribe"
+msgstr "🔔 Subscribe"
 
 #: bot/routers/client/start.py:15
 msgid "Hi, {}"
-msgstr ""
+msgstr "👋 Hi, {}"
 
