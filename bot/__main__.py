@@ -9,7 +9,7 @@ from bot.middlewares.i18n import simple_locale_middleware
 from bot.routers import register_routers
 from bot.routers.client import register_client_router
 
-from config import Settings
+from bot.config import Settings
 
 
 async def __on_start_up(dp: Dispatcher) -> None:

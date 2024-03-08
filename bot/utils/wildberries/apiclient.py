@@ -1,30 +1,19 @@
+import logging
+
 import requests as requests
 
-
-class WildberriesError(Exception):
-    pass
-
-
-class WildberriesError404(Exception):
-    pass
-
-
-class WildberriesError500(Exception):
-    pass
+from bot.utils.wildberries.exceptions import WildberriesError, WildberriesError404, WildberriesError500
 
 
 def get_card_details(article: int | str) -> dict:
-    url = f"https://card.wb.ru/cards/v1/detail?appType=1&curr=rub&dest=-1257786&spp=30&nm={article}"
-    response = requests.get(url)
-    data = response.json()
-
     try:
+        url = f"https://card.wb.ru/cards/v1/detail?appType=1&curr=rub&dest=-1257786&spp=30&nm={article}"
+        response = requests.get(url)
+        data = response.json()
         products = data.get("data").get("products")
-    except:
-        raise WildberriesError500(
-            f"An unexpected error has occurred while getting card details, "
-            f"status_code: {response.status_code}"
-        )
+    except Exception as e:
+        logging.error(e)
+        raise WildberriesError500(f"An unexpected error has occurred while getting card details")
 
     if not products:
         raise WildberriesError404("This article does not exist.")

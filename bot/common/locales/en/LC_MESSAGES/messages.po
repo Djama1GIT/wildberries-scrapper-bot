@@ -43,8 +43,8 @@ msgstr "❌ The article number must be in numerical format."
 msgid "It is impossible to get information about this article."
 msgstr "⛔ It is impossible to get information about this article."
 
-msgid "There was an error getting the data, try again later."
-msgstr "🛑 There was an error getting the data, try again later."
+msgid "An error occurred while requesting data, please try again later."
+msgstr "🛑 An error occurred while requesting data, please try again later."
 
 msgid "Product name"
 msgstr "🔹 Product name"

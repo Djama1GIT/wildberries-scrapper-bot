@@ -6,7 +6,8 @@ from aiogram.utils.i18n import gettext as _
 from aiogram.utils.i18n import lazy_gettext as __
 
 from bot.keyboards.articles import get_subscribe_to_the_article_ikb
-from bot.utils import wildberries_apiclient as wb
+from bot.utils.wildberries.exceptions import WildberriesError404, WildberriesError500
+import bot.utils.wildberries as wb
 
 
 class SubscribeArticleForm(StatesGroup):
@@ -17,7 +18,7 @@ class SubscribeArticleForm(StatesGroup):
 def register_articles(router: Router) -> None:
     router.message.register(get_article_data_from_db_message, F.text == __("Get information from the database"))
     router.message.register(get_article_data_message, F.text == __("Get product information"))
-    router.message.register(get_article_number, SubscribeArticleForm.article)
+    router.message.register(get_article_data_by_number_message, SubscribeArticleForm.article)
     router.callback_query.register(subscribe_to_the_article_callback, F.data == "subscribe")
 
 
@@ -35,26 +36,26 @@ async def get_article_data_message(msg: types.Message, state: FSMContext) -> Non
     )
 
 
-async def get_article_number(msg: types.Message, state: FSMContext) -> None:
-    if msg.text.isnumeric():
+async def get_article_data_by_number_message(msg: types.Message, state: FSMContext) -> None:
+    article = msg.text
+    if article.isnumeric():
         try:
-            data = wb.get_card_details(msg.text)
-            serialized_data = wb.serialize_card_details(data)
+            data = wb.get_data_about_article(article)
             await msg.answer(
-                text=f'{_("Product name")}: {serialized_data.get("name")}\n'
-                     f'{_("Article")}: {serialized_data.get("article")}\n'
-                     f'{_("Price")}: {serialized_data.get("price")}\n'
-                     f'{_("Rating")}: {serialized_data.get("rating")}\n'
-                     f'{_("Quantity in stock")}: {serialized_data.get("quantity")}',
+                text=f'{_("Product name")}: {data.get("name")}\n'
+                     f'{_("Article")}: {data.get("article")}\n'
+                     f'{_("Price")}: {data.get("price")}\n'
+                     f'{_("Rating")}: {data.get("rating")}\n'
+                     f'{_("Quantity in stock")}: {data.get("quantity")}',
                 reply_markup=get_subscribe_to_the_article_ikb(),
             )
-        except wb.WildberriesError404 as e:
+        except WildberriesError404:
             await msg.answer(
                 text=_("It is impossible to get information about this article."),
             )
-        except wb.WildberriesError500 as e:
+        except WildberriesError500:
             await msg.answer(
-                text=_("There was an error getting the data, try again later.")
+                text=_("An error occurred while requesting data, please try again later.")
             )
     else:
         await msg.answer(
