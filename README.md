@@ -21,12 +21,19 @@ cd wildberries-scrapper-bot
 docker-compose up --build
 ```
 
+## Extra
+
+Flower: http://localhost:5555/  Example: http://51.250.2.103:5555/
+
+Telegram: https://t.me/wildberries_scrapper_bot
+
 ## Technologies Used
 
-- Python - The programming language used for the project.
+- Python - A programming language used for the project.
 - Aiogram3 - A Python wrapper for the Telegram Bot API.
 - Redis - An in-memory database used in the project for data caching and storing Celery tasks.
 - Celery - A library used in the project for executing background tasks and processing long-running operations.
+- Flower - A web interface used in the project to monitor the status of Celery tasks and track their execution.
 - PostgreSQL - A relational database used in the project for data storage.
 - SQLAlchemy - An Object-Relational Mapping (ORM) used in the project for working with the database.
 - Alembic - A database migration library used in the project to update the database structure when data models change.

@@ -62,20 +62,20 @@ services:
     depends_on:
       - bot
 
-#  flower:
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    container_name: wb_scrapper_flower
-#    command: sh -c "celery -A tasks.tasks:celery_app flower"
-#    ports:
-#      - 5555:5555
-#    restart: always
-#    env_file:
-#      - .env
-#    depends_on:
-#      - redis
-#      - celery
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wb_scrapper_flower
+    command: sh -c "celery -A bot.utils.notifications:celery flower"
+    ports:
+      - 5555:5555
+    restart: always
+    env_file:
+      - .env
+      - .env-non-dev
+    depends_on:
+      - celery
 
 volumes:
   db_data:
