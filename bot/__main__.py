@@ -10,6 +10,11 @@ from bot.middlewares.i18n import simple_locale_middleware
 from bot.routers import register_routers
 from bot.routers.client import register_client_router
 
+settings = Settings()
+
+bot = Bot(token=settings.TOKEN,
+          default=DefaultBotProperties(parse_mode="HTML"))
+
 
 async def main() -> None:
     logging.basicConfig(
@@ -18,9 +23,6 @@ async def main() -> None:
     )
     logging.info("Bot starting...")
 
-    settings = Settings()
-    bot = Bot(token=settings.TOKEN,
-              default=DefaultBotProperties(parse_mode="HTML"))
     dp = Dispatcher()
 
     router = Router(name="main")
@@ -29,7 +31,8 @@ async def main() -> None:
     dp.include_router(router)
 
     try:
-        await dp.start_polling(bot, skip_updates=True)
+        await dp.start_polling(bot)
+
     except Exception as e:
         print(e)
 

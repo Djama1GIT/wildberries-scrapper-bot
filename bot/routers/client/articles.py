@@ -12,13 +12,15 @@ from bot.common.schemas import (
     ArticlesHistoryReadSchema,
 )
 from bot.common.schemas.articles import Product
+from bot.database.exceptions import ExistenceError
 from bot.database.repositories.articles import ArticlesRepository
 from bot.filters.articles import InjectArticlesRepositoryFilter
-from bot.keyboards.articles import get_subscribe_to_the_article_ikb, \
-    SubscribeCallback
-from bot.utils.wildberries.exceptions import (
-    WildberriesError404,
+from bot.keyboards.articles import (
+    get_subscribe_to_the_article_ikb,
+    SubscribeCallback,
+    UnsubscribeCallback,
 )
+from bot.utils.wildberries.exceptions import WildberriesError404
 import bot.utils.wildberries as wb
 
 settings = Settings()
@@ -48,10 +50,14 @@ def register_articles(router: Router) -> None:
         InjectArticlesRepositoryFilter(),
         SubscribeCallback.filter(),
     )
+    router.callback_query.register(
+        unsubscribe_from_the_article_callback,
+        InjectArticlesRepositoryFilter(),
+        UnsubscribeCallback.filter(),
+    )
 
 
-async def get_article_data_message(msg: types.Message,
-                                   state: FSMContext) -> None:
+async def get_article_data_message(msg: types.Message, state: FSMContext) -> None:
     await state.set_state(GetArticleDataForm.article)
     await msg.answer(
         text=_("Which article's information do you want to receive?"),
@@ -67,10 +73,18 @@ async def get_article_data_by_number_message(
     if article.isnumeric():
         try:
             product: Product = wb.get_info_about_product(article)
+            subscribed = await articles_repository. \
+                check_is_user_subscribed_to_product(
+                    msg.from_user.id,
+                    int(article)
+                )
+            ikb = None
+            if not subscribed:
+                ikb = get_subscribe_to_the_article_ikb(article)
             await msg.answer(
                 text=f"{_('Actual information')}\n\n"
                      f"{str(product)}",
-                reply_markup=get_subscribe_to_the_article_ikb(article),
+                reply_markup=ikb,
             )
             await articles_repository.insert_history_record(
                 ArticlesHistoryCreateSchema(
@@ -85,8 +99,7 @@ async def get_article_data_by_number_message(
             )
         except:
             await msg.answer(
-                text=_(
-                    "An error occurred while requesting data, please try again later.")
+                text=_("An error occurred while requesting data, please try again later."),
             )
     else:
         await msg.answer(
@@ -114,8 +127,7 @@ async def get_article_data_from_db_message(
             )
     except:
         await msg.answer(
-            text=_(
-                "An error occurred while requesting data, please try again later.")
+            text=_("An error occurred while requesting data, please try again later.")
         )
     finally:
         await state.clear()
@@ -138,6 +150,30 @@ async def subscribe_to_the_article_callback(
     except IntegrityError:
         await call.message.answer(
             text=_("You have already subscribed to this product.")
+        )
+    except:
+        await call.message.answer(
+            text=_("An error has occurred. Try again later.")
+        )
+
+
+async def unsubscribe_from_the_article_callback(
+        call: types.CallbackQuery,
+        callback_data: UnsubscribeCallback,
+        articles_repository: ArticlesRepository
+) -> None:
+    await call.answer()
+    try:
+        await articles_repository.delete_subscribe_record(
+            user_id=call.from_user.id,
+            article=callback_data.article,
+        )
+        await call.message.answer(
+            text=_("You have successfully unsubscribed from the product {}.").format(callback_data.article),
+        )
+    except ExistenceError:
+        await call.message.answer(
+            text=_("You have already unsubscribed from this product.")
         )
     except:
         await call.message.answer(

@@ -9,6 +9,7 @@ from bot.config import Settings
 
 from bot.database import metadata
 from bot.database.models.articles import ArticlesHistory, ArticleUserSubscribes
+from bot.database.models.users import User
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -25,6 +25,8 @@ class Settings(BaseSettings):
     REDIS_HOST: str = os.getenv("REDIS_HOST")
     REDIS_PORT: int = os.getenv("REDIS_PORT")
 
+    NOTIFICATION_PERIOD: int = os.getenv("NOTIFICATION_PERIOD")
+
     @property
     def DATABASE_URL(self):
         return "{driver}://{user}:{password}@{host}:{port}/{db_name}".format(

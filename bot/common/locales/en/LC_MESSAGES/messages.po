@@ -34,6 +34,9 @@ msgstr "🎯 Get product information"
 msgid "Subscribe"
 msgstr "🔔 Subscribe"
 
+msgid "Unsubscribe"
+msgstr "🔕 Unsubscribe"
+
 msgid "Which article's information do you want to receive?"
 msgstr "🔎 Which article do you want to receive information about?"
 
@@ -76,8 +79,14 @@ msgstr "⭕ The request history is empty."
 msgid "You have successfully subscribed to the product {}."
 msgstr "✅ You have successfully subscribed to the product {}."
 
+msgid "You have successfully unsubscribed from the product {}."
+msgstr "✅ You have successfully unsubscribed from the product {}."
+
 msgid "You have already subscribed to this product."
 msgstr "⚠️ You have already subscribed to this product."
+
+msgid "You have already unsubscribed from this product."
+msgstr "⚠️ You have already unsubscribed from this product."
 
 msgid "You are not subscribed to any products."
 msgstr "⚠️ You are not subscribed to any products."

@@ -6,6 +6,8 @@ from pydantic import BaseModel, Field
 
 from aiogram.utils.i18n import gettext as _
 
+from bot.common.schemas.users import User
+
 
 class Product(BaseModel):
     article: int = Field(..., description="Article of the product")
@@ -43,4 +45,4 @@ class ArticlesHistoryCreateSchema(ArticlesHistoryReadSchema):
 
 class ArticleSubscribers(BaseModel):
     article: int = Field(..., description="Article of the product")
-    user_ids: List[int] = Field(..., description="IDs of the users who subscribed")
+    users: List[User] = Field(..., description="Users who subscribed")

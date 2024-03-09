@@ -16,16 +16,13 @@ def handle_exceptions(func):
             logging.error(f"IntegrityError occurred in {func.__name__}: {exc}")
             raise exc
         except SQLAlchemyError as exc:
-            logging.error(
-                f"SQLAlchemyError occurred in {func.__name__}: {exc}")
+            logging.error(f"SQLAlchemyError occurred in {func.__name__}: {exc}")
             try:
-                logging.info(
-                    f"Attempting to rollback session due to SQLAlchemyError in {func.__name__}")
+                logging.info(f"Attempting to rollback session due to SQLAlchemyError in {func.__name__}")
                 await args[0].session.rollback()
                 raise CommitError(exc)
             except SQLAlchemyError as exc:
-                logging.error(
-                    f"RollbackError occurred in {func.__name__}: {exc}")
+                logging.error(f"RollbackError occurred in {func.__name__}: {exc}")
                 raise RollbackError(exc)
 
     return wrapper
