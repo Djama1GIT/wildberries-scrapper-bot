@@ -36,3 +36,13 @@ class ArticlesHistory(Base):
     price: Mapped[float]
     rating: Mapped[float]
     quantity: Mapped[int]
+
+    def as_dict(self):
+        return {
+            "name": self.name,
+            "article": self.article,
+            "price": self.price,
+            "rating": self.rating,
+            "quantity": self.quantity,
+            "created_at": self.created_at,
+        }

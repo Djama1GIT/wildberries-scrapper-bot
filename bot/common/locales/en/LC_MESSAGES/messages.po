@@ -61,6 +61,18 @@ msgstr "🔹 Rating"
 msgid "Quantity in stock"
 msgstr "🔹 Quantity in stock"
 
+msgid "Record created at"
+msgstr "🔹 Record created at"
+
+msgid "Information from the database"
+msgstr "🗄️ Information from the database"
+
+msgid "Actual information"
+msgstr "🆕 Actual information"
+
+msgid "The request history is empty."
+msgstr "⭕ The request history is empty."
+
 #: bot/routers/client/start.py:15
 msgid "Hi, {}"
 msgstr "👋 Hi, {}"

@@ -27,9 +27,9 @@ def serialize_card_details(card_details: dict) -> dict:
         product = data.get("products")[0]
         serialized_data = {
             "name": product.get("name"),
-            "article": product.get("id"),
+            "article": int(product.get("id")),
             "price": int(product.get("salePriceU")) / 100,
-            "rating": product.get("reviewRating"),
+            "rating": float(product.get("reviewRating")),
             "quantity": 0,
         }
 
