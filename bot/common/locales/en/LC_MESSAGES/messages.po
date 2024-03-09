@@ -73,6 +73,21 @@ msgstr "🆕 Actual information"
 msgid "The request history is empty."
 msgstr "⭕ The request history is empty."
 
+msgid "You have successfully subscribed to the product {}."
+msgstr "✅ You have successfully subscribed to the product {}."
+
+msgid "You have already subscribed to this product."
+msgstr "⚠️ You have already subscribed to this product."
+
+msgid "You are not subscribed to any products."
+msgstr "⚠️ You are not subscribed to any products."
+
+msgid "You have successfully unsubscribed from all products."
+msgstr "✅ You have successfully unsubscribed from all products."
+
+msgid "An error has occurred. Try again later."
+msgstr "🚧 An error has occurred. Try again later."
+
 #: bot/routers/client/start.py:15
 msgid "Hi, {}"
 msgstr "👋 Hi, {}"

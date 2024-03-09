@@ -8,3 +8,7 @@ class CommitError(DatabaseError):
 
 class RollbackError(DatabaseError):
     pass
+
+
+class ExistenceError(DatabaseError):
+    pass

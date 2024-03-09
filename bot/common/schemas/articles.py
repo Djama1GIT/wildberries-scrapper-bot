@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel, Field
 
@@ -25,7 +25,8 @@ class Product(BaseModel):
 class ArticlesHistoryReadSchema(Product):
     id: Optional[int] = Field(None, description="Identifier of the record")
     user_id: Optional[int] = Field(None, description="User identifier")
-    created_at: Optional[datetime] = Field(None, description="Record creation date")
+    created_at: Optional[datetime] = Field(None,
+                                           description="Record creation date")
 
     def __str__(self):
         return "{other_info}\n{datetime_caption}: {datetime}\n{sep}\n".format(
@@ -38,3 +39,8 @@ class ArticlesHistoryReadSchema(Product):
 
 class ArticlesHistoryCreateSchema(ArticlesHistoryReadSchema):
     user_id: int = Field(..., description="User identifier")
+
+
+class ArticleSubscribers(BaseModel):
+    article: int = Field(..., description="Article of the product")
+    user_ids: List[int] = Field(..., description="IDs of the users who subscribed")

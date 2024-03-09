@@ -22,6 +22,9 @@ class Settings(BaseSettings):
     POSTGRES_HOST: str = os.getenv("POSTGRES_HOST")
     POSTGRES_PORT: int = os.getenv("POSTGRES_PORT")
 
+    REDIS_HOST: str = os.getenv("REDIS_HOST")
+    REDIS_PORT: int = os.getenv("REDIS_PORT")
+
     @property
     def DATABASE_URL(self):
         return "{driver}://{user}:{password}@{host}:{port}/{db_name}".format(

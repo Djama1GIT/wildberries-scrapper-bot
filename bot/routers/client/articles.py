@@ -4,6 +4,7 @@ from aiogram.fsm.state import StatesGroup, State
 
 from aiogram.utils.i18n import gettext as _
 from aiogram.utils.i18n import lazy_gettext as __
+from sqlalchemy.exc import IntegrityError
 
 from bot.config import Settings
 from bot.common.schemas import (
@@ -11,13 +12,12 @@ from bot.common.schemas import (
     ArticlesHistoryReadSchema,
 )
 from bot.common.schemas.articles import Product
-from bot.database.exceptions import DatabaseError
 from bot.database.repositories.articles import ArticlesRepository
 from bot.filters.articles import InjectArticlesRepositoryFilter
-from bot.keyboards.articles import get_subscribe_to_the_article_ikb
+from bot.keyboards.articles import get_subscribe_to_the_article_ikb, \
+    SubscribeCallback
 from bot.utils.wildberries.exceptions import (
     WildberriesError404,
-    WildberriesError500,
 )
 import bot.utils.wildberries as wb
 
@@ -46,11 +46,12 @@ def register_articles(router: Router) -> None:
     router.callback_query.register(
         subscribe_to_the_article_callback,
         InjectArticlesRepositoryFilter(),
-        F.data == "subscribe",
+        SubscribeCallback.filter(),
     )
 
 
-async def get_article_data_message(msg: types.Message, state: FSMContext) -> None:
+async def get_article_data_message(msg: types.Message,
+                                   state: FSMContext) -> None:
     await state.set_state(GetArticleDataForm.article)
     await msg.answer(
         text=_("Which article's information do you want to receive?"),
@@ -69,7 +70,7 @@ async def get_article_data_by_number_message(
             await msg.answer(
                 text=f"{_('Actual information')}\n\n"
                      f"{str(product)}",
-                reply_markup=get_subscribe_to_the_article_ikb(),
+                reply_markup=get_subscribe_to_the_article_ikb(article),
             )
             await articles_repository.insert_history_record(
                 ArticlesHistoryCreateSchema(
@@ -79,11 +80,13 @@ async def get_article_data_by_number_message(
             )
         except WildberriesError404:
             await msg.answer(
-                text=_("It is impossible to get information about this article."),
+                text=_(
+                    "It is impossible to get information about this article."),
             )
-        except (WildberriesError500, DatabaseError):
+        except:
             await msg.answer(
-                text=_("An error occurred while requesting data, please try again later.")
+                text=_(
+                    "An error occurred while requesting data, please try again later.")
             )
     else:
         await msg.answer(
@@ -103,22 +106,40 @@ async def get_article_data_from_db_message(
         if history:
             await msg.answer(
                 text=f"{_('Information from the database')}\n\n"
-                f"{''.join([str(record) for record in history])}",
+                     f"{''.join([str(record) for record in history])}",
             )
         else:
             await msg.answer(
                 text=_("The request history is empty."),
             )
-    except DatabaseError:
+    except:
         await msg.answer(
-            text=_("An error occurred while requesting data, please try again later.")
+            text=_(
+                "An error occurred while requesting data, please try again later.")
         )
     finally:
         await state.clear()
 
 
-async def subscribe_to_the_article_callback(call: types.CallbackQuery) -> None:
+async def subscribe_to_the_article_callback(
+        call: types.CallbackQuery,
+        callback_data: SubscribeCallback,
+        articles_repository: ArticlesRepository
+) -> None:
     await call.answer()
-    await call.message.answer(
-        text="subscribe to the article",
-    )
+    try:
+        await articles_repository.insert_subscribe_record(
+            user_id=call.from_user.id,
+            article=callback_data.article,
+        )
+        await call.message.answer(
+            text=_("You have successfully subscribed to the product {}.").format(callback_data.article),
+        )
+    except IntegrityError:
+        await call.message.answer(
+            text=_("You have already subscribed to this product.")
+        )
+    except:
+        await call.message.answer(
+            text=_("An error has occurred. Try again later.")
+        )
