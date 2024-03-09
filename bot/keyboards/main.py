@@ -1,4 +1,5 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+
 from bot.middlewares.i18n import gettext as _
 
 
@@ -14,10 +15,10 @@ def get_main_kb() -> ReplyKeyboardMarkup:
             ],
             [
                 KeyboardButton(text=_("Get information from the database")),
-                KeyboardButton(text=_("Stop notifications"))
+                KeyboardButton(text=_("Stop notifications")),
             ],
         ],
-        resize_keyboard=True
+        resize_keyboard=True,
     )
 
     return kb

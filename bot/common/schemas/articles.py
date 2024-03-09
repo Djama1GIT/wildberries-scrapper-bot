@@ -23,14 +23,17 @@ class Product(BaseModel):
 
 
 class ArticlesHistoryReadSchema(Product):
-    id: Optional[int] = Field(None, description="Identifier of the article history record")
+    id: Optional[int] = Field(None, description="Identifier of the record")
     user_id: Optional[int] = Field(None, description="User identifier")
     created_at: Optional[datetime] = Field(None, description="Record creation date")
 
     def __str__(self):
-        return f'{str(Product(**self.model_dump()))}\n' \
-               f'{_("Record created at")}: {self.created_at.strftime("%d.%m.%Y %H:%M:%S")}\n' \
-               f'============================\n'
+        return "{other_info}\n{datetime_caption}: {datetime}\n{sep}\n".format(
+            other_info=str(Product(**self.model_dump())),
+            datetime_caption=_("Record created at"),
+            datetime=self.created_at.strftime("%d.%m.%Y %H:%M:%S"),
+            sep="=" * 30,
+        )
 
 
 class ArticlesHistoryCreateSchema(ArticlesHistoryReadSchema):

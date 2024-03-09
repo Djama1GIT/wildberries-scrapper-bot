@@ -15,5 +15,5 @@ async def start_message(msg: types.Message) -> None:
     reply_text = _("Hi, {}").format(msg.from_user.full_name)
     await msg.answer(
         text=reply_text,
-        reply_markup=get_main_kb()
+        reply_markup=get_main_kb(),
     )

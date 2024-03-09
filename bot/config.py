@@ -24,5 +24,11 @@ class Settings(BaseSettings):
 
     @property
     def DATABASE_URL(self):
-        return f'postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}' \
-               f'@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}'
+        return "{driver}://{user}:{password}@{host}:{port}/{db_name}".format(
+            driver="postgresql+asyncpg",
+            user=self.POSTGRES_USER,
+            password=self.POSTGRES_PASSWORD,
+            host=self.POSTGRES_HOST,
+            port=self.POSTGRES_PORT,
+            db_name=self.POSTGRES_DB,
+        )

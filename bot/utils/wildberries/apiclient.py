@@ -2,7 +2,11 @@ import logging
 
 import requests as requests
 
-from bot.utils.wildberries.exceptions import WildberriesError, WildberriesError404, WildberriesError500
+from bot.utils.wildberries.exceptions import (
+    WildberriesError,
+    WildberriesError404,
+    WildberriesError500,
+)
 
 
 def get_card_details(article: int | str) -> dict:

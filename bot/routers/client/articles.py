@@ -15,7 +15,10 @@ from bot.database.exceptions import DatabaseError
 from bot.database.repositories.articles import ArticlesRepository
 from bot.filters.articles import InjectArticlesRepositoryFilter
 from bot.keyboards.articles import get_subscribe_to_the_article_ikb
-from bot.utils.wildberries.exceptions import WildberriesError404, WildberriesError500
+from bot.utils.wildberries.exceptions import (
+    WildberriesError404,
+    WildberriesError500,
+)
 import bot.utils.wildberries as wb
 
 settings = Settings()
@@ -29,21 +32,21 @@ def register_articles(router: Router) -> None:
     router.message.register(
         get_article_data_from_db_message,
         InjectArticlesRepositoryFilter(),
-        F.text == __("Get information from the database")
+        F.text == __("Get information from the database"),
     )
     router.message.register(
         get_article_data_message,
-        F.text == __("Get product information")
+        F.text == __("Get product information"),
     )
     router.message.register(
         get_article_data_by_number_message,
         InjectArticlesRepositoryFilter(),
-        GetArticleDataForm.article
+        GetArticleDataForm.article,
     )
     router.callback_query.register(
         subscribe_to_the_article_callback,
         InjectArticlesRepositoryFilter(),
-        F.data == "subscribe"
+        F.data == "subscribe",
     )
 
 
@@ -72,7 +75,7 @@ async def get_article_data_by_number_message(
                 ArticlesHistoryCreateSchema(
                     user_id=msg.from_user.id,
                     **product.model_dump(),
-                )
+                ),
             )
         except WildberriesError404:
             await msg.answer(
@@ -100,11 +103,11 @@ async def get_article_data_from_db_message(
         if history:
             await msg.answer(
                 text=f"{_('Information from the database')}\n\n"
-                     f"{''.join([str(record) for record in history])}"
+                f"{''.join([str(record) for record in history])}",
             )
         else:
             await msg.answer(
-                text=_("The request history is empty.")
+                text=_("The request history is empty."),
             )
     except DatabaseError:
         await msg.answer(
@@ -117,5 +120,5 @@ async def get_article_data_from_db_message(
 async def subscribe_to_the_article_callback(call: types.CallbackQuery) -> None:
     await call.answer()
     await call.message.answer(
-        text="subscribe to the article"
+        text="subscribe to the article",
     )

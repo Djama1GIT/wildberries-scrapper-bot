@@ -11,5 +11,5 @@ class InjectArticlesRepositoryFilter(Filter):
         async_session = async_session_maker()
         articles_repository = ArticlesRepository(async_session)
         return {
-            "articles_repository": articles_repository
+            "articles_repository": articles_repository,
         }

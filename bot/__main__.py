@@ -1,27 +1,26 @@
 import asyncio
 import logging
 
-from aiogram import Bot, Dispatcher, types, Router
+from aiogram import Bot, Dispatcher, Router
 from aiogram.client.default import DefaultBotProperties
 
+from bot.config import Settings
 from bot.middlewares import register_middlewares
 from bot.middlewares.i18n import simple_locale_middleware
 from bot.routers import register_routers
 from bot.routers.client import register_client_router
 
-from bot.config import Settings
-
-
-async def __on_start_up(dp: Dispatcher) -> None:
-    ...
-
 
 async def main() -> None:
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s :: %(levelname)s :: %(funcName)s :: %(message)s"
+    )
     logging.info("Bot starting...")
 
     settings = Settings()
-    bot = Bot(token=settings.TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
+    bot = Bot(token=settings.TOKEN,
+              default=DefaultBotProperties(parse_mode="HTML"))
     dp = Dispatcher()
 
     router = Router(name="main")
@@ -30,7 +29,7 @@ async def main() -> None:
     dp.include_router(router)
 
     try:
-        await dp.start_polling(bot, skip_updates=True, on_startup=__on_start_up)
+        await dp.start_polling(bot, skip_updates=True)
     except Exception as e:
         print(e)
 
